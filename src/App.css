@@ -1,38 +1,217 @@
-.App {
-  text-align: center;
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+.loadingText,
+.headerText {
+   min-width: 400px;
+   width: 25vw;
+   margin: 2rem 0;
+   font-size: 1.2rem;
+   position: relative;
+   top: 0;
+   left: 50%;
+   transform: translateX(-50%);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.filterInput {
+   position: relative;
+   top: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   margin-bottom: 2rem;
+   outline: none;
+   border: 2px solid black;
+   padding: .5rem;
+   font-size: 1.3rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+
+.tableSwitchers {
+   width: 15vw;
+   position: relative;
+   left: 80%;
+   display: flex;
+   flex-direction: row-reverse;
+
 }
 
-.App-link {
-  color: #61dafb;
+.button,
+.sorter {
+   width: 5rem;
+   height: 2rem;
+   font-size: .9rem;
+   position: relative;
+   display: block;
+   cursor: pointer;
+
+
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.previousPage,
+.nextPage {
+   font-size: 1.4rem;
+
+}
+
+
+.table {
+   width: 90vw;
+   height: 75vh;
+   margin: 0 auto;
+   display: flex;
+   flex-direction: column;
+}
+
+.table_row {
+
+   width: 100%;
+   height: 6vh;
+   display: flex;
+   justify-content: space-evenly;
+   align-items: flex-start;
+
+}
+
+.table_header {
+   cursor: pointer;
+}
+
+.table_header,
+.table_data {
+   display: flex;
+   flex-basis: 18%;
+   justify-content: center;
+   align-items: center;
+   border: 1px solid black;
+   height: 100%;
+   font-size: .85rem;
+
+   text-align: center;
+}
+
+.table_header {
+   background-color: rgba(78, 179, 238, 0.7);
+
+}
+
+/* Portrait */
+@media (min-width:360px) {
+   .table_data {
+      font-size: .55rem;
+   }
+}
+
+/* Landscape */
+
+@media(min-width:480px) {
+   .headerText {
+      font-size: 1.2rem;
+   }
+
+   .filterInput {
+      padding: .5rem 1rem;
+   }
+
+   .button {
+      width: 5rem;
+      height: 2rem;
+   }
+
+   .previousPage,
+   .nextPage {
+      font-size: 1.1rem;
+   }
+
+   .table_header {
+      font-size: .8rem;
+   }
+
+   .table_data {
+      font-size: .75rem;
+
+
+   }
+
+   .table_row {
+      height: 7vh;
+   }
+}
+
+
+/* Portrait */
+
+@media (min-width:640px) {}
+
+/* Landscape */
+
+@media (min-width:640px) and (orientation: landscape) {
+   .headerText {
+      font-size: 1rem;
+   }
+
+   .filterInput {
+      padding: 0;
+   }
+
+   .button {
+      width: 4rem;
+      height: 1.5rem;
+   }
+
+   .previousPage,
+   .nextPage {
+      font-size: 1.1rem;
+   }
+
+   .table_header {
+      font-size: .6rem;
+   }
+
+   .table_data {
+      font-size: .65rem;
+
+
+   }
+
+   .table_row {
+      height: 7vh;
+   }
+}
+
+@media (min-width:800px) {
+
+   .headerText,
+   .loadingText {
+      min-width: 500px;
+   }
+
+   .headerText {
+      font-size: 1.6rem;
+   }
+
+   .filterInput {
+      padding: .5rem 1.5rem;
+   }
+
+   .button {
+      width: 6.5rem;
+      height: 2.5rem;
+   }
+
+   .previousPage,
+   .nextPage {
+      font-size: 1.4rem;
+   }
+
+   .table_header {
+      font-size: 1.1rem;
+   }
+
+   .table_data {
+      font-size: 1rem;
+   }
 }
