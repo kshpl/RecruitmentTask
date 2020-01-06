@@ -16,24 +16,28 @@ class App extends Component {
       { value: 'Average Income' },
       { value: 'Last Month Income' },
     ],
-    companiesIds: [],
-    companiesNames: [],
-    companiesCities: [],
     companiesIncomes: {
       totalIncomes: [],
       averageIncomes: [],
       lastMonthIncomes: [],
     },
-    companiesIncomesOriginals: {
-      totalIncomesOriginals: [],
-      averageIncomesOriginals: [],
-      lastMonthIncomesOriginals: [],
-    },
     finalData: [],
+    originalData: [],
+
+    ids: [],
+    idsRev: [],
+    cities: [],
+    names: [],
+    totals: [],
+    average: [],
+    lastMonth: [],
+
     id: 205,
     index: 0,
     dataIndex: 0,
   }
+
+
 
 
   async componentDidMount() {
@@ -42,34 +46,13 @@ class App extends Component {
         const companiesDetails = 'https://recruitment.hal.skygate.io/companies';
         const detailsResponse = await fetch(companiesDetails);
         const detailsData = detailsResponse.json().then(detailsData => {
-          const idDetails = detailsData.map((company, index) => company.id)
-          const nameDetails = detailsData.map((company, index) => company.name)
-          const cityDetails = detailsData.map((company, index) => company.city)
 
-          const idSorted = detailsData.map((company, index) => company.id).sort();
-          const idSortedReverse = detailsData.map((company, index) => company.id).sort().reverse();
-
-          const nameSorted = detailsData.map((company, index) => company.name).sort();
-          const nameSortedReverse = detailsData.map((company, index) => company.name).sort().reverse();
-
-          const citySorted = detailsData.map((company, index) => company.city).sort();
-          const citySortedReverse = detailsData.map((company, index) => company.city).sort().reverse();
           this.setState({
 
             finalData: detailsData,
-            companiesNames: nameDetails,
-            companiesIds: idDetails,
-            companiesCities: cityDetails,
-            id: idDetails[this.state.index],
-            companiesIdsSorted: idSorted,
-            companiesNamesSorted: nameSorted,
-            companiesCitiesSorted: citySorted,
-            companiesIdsSortedReverse: idSortedReverse,
-            companiesNamesSortedReverse: nameSortedReverse,
-            companiesCitiesSortedReverse: citySortedReverse,
-            originalsNames: nameDetails,
-            originalsIds: idDetails,
-            originalsCities: cityDetails,
+
+            id: detailsData[this.state.index].id,
+
 
           })
 
@@ -106,11 +89,8 @@ class App extends Component {
 
           return (
             this.state.companiesIncomes.totalIncomes.push(summed),
-            this.state.companiesIncomesOriginals.totalIncomesOriginals.push(summed),
             this.state.companiesIncomes.averageIncomes.push(average),
-            this.state.companiesIncomesOriginals.averageIncomesOriginals.push(average),
-            this.state.companiesIncomes.lastMonthIncomes.push(lastmonthSum),
-            this.state.companiesIncomesOriginals.lastMonthIncomesOriginals.push(lastmonthSum)
+            this.state.companiesIncomes.lastMonthIncomes.push(lastmonthSum)
 
           )
         })
@@ -124,33 +104,123 @@ class App extends Component {
       }
     }
 
-    setInterval(() => {
-      if (this.state.index < this.state.companiesIds.length) {
+
+
+    const getAllData = setInterval(() => {
+      if (this.state.index < this.state.finalData.length) {
         getCompaniesIncomes(this.state.id)
         this.setState({
-          id: this.state.companiesIds[this.state.index],
+          id: this.state.finalData[this.state.index].id,
           index: this.state.index + 1
         })
+        console.log('hey #1')
+      } else if (this.state.index = this.state.finalData.length && this.state.index < this.state.finalData.length + 1) {
+        console.log('hey #2')
+        this.sortDatas()
+        clearInterval(getAllData)
+        this.setState({
+          originalData: [...this.state.finalData]
+        })
+
       }
     }, 0)
+
 
     getCompaniesNames()
 
 
+  }
+
+
+
+  createCompanySet = () => {
+
+
+    this.state.finalData.map((company, index) => {
+      return (company.total = this.state.companiesIncomes.totalIncomes[index],
+        company.average = this.state.companiesIncomes.averageIncomes[index],
+        company.lastMonth = this.state.companiesIncomes.lastMonthIncomes[index])
+
+    })
 
 
 
   }
+
+
+
+  sortDatas = () => {
+
+    const FinalDataIDS = [...this.state.finalData];
+    const sortedByID = FinalDataIDS.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+    const sortedByIDRev = [...sortedByID].reverse()
+
+
+
+
+
+    const FinalDataNames = [...this.state.finalData];
+    const sortedByName = FinalDataNames.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
+    const sortedByNameRev = [...sortedByName].reverse()
+
+
+    const FinalDataCity = [...this.state.finalData];
+    const sortedByCity = FinalDataCity.sort((a, b) => (a.city > b.city) ? 1 : ((b.city > a.city) ? -1 : 0))
+    const sortedByCityRev = [...sortedByCity].reverse()
+
+    const FinalDataTotal = [...this.state.finalData];
+    const sortedByTotal = FinalDataTotal.sort((a, b) => (a.total > b.total) ? 1 : ((b.total > a.total) ? -1 : 0))
+    const sortedByTotalRev = [...sortedByTotal].reverse()
+
+    const FinalDataAverage = [...this.state.finalData];
+    const sortedByAverage = FinalDataAverage.sort((a, b) => (a.average > b.average) ? 1 : ((b.average > a.average) ? -1 : 0))
+    const sortedByAverageRev = [...sortedByAverage].reverse()
+
+
+    const FinalDataLastMonth = [...this.state.finalData];
+    const sortedByLastMonth = FinalDataLastMonth.sort((a, b) => (a.lastMonth > b.lastMonth) ? 1 : ((b.lastMonth > a.lastMonth) ? -1 : 0))
+    const sortedByLastMonthRev = [...sortedByLastMonth].reverse()
+
+
+    console.log(this.state.finalData)
+    this.setState({
+
+      ids: sortedByID,
+      idsRev: sortedByIDRev,
+      names: sortedByName,
+      namesRev: sortedByNameRev,
+      cities: sortedByCity,
+      citiesRev: sortedByCityRev,
+      totals: sortedByTotal,
+      totalsRev: sortedByTotalRev,
+      average: sortedByAverage,
+      averageRev: sortedByAverageRev,
+      lastMonth: sortedByLastMonth,
+      lastMonthRev: sortedByLastMonthRev
+
+
+    })
+    console.log(this.state.ids)
+    console.log(this.state.names)
+    console.log(this.state.cities)
+    console.log(this.state.totals)
+    console.log(this.state.average)
+    console.log(this.state.lastMonth)
+  }
+
+
+
+
 
 
 
 
   getHeaders = () => {
-    const headers = this.state.headers.map((header, index) => <th key={index} sorted={this.state.sorted} onClick={this.handleSort} className='table_header'>{header.value}</th>)
+    const headers = this.state.headers.map((header, index) => <th key={index} sorted={this.state.sorted} onClick={this.handleSort} className={`table_header ${header.value}`}>{header.value}</th>)
     return headers
   }
   handleNextPage = () => {
-    if (this.state.dataIndex < this.state.companiesIds.length - 20) {
+    if (this.state.dataIndex < this.state.finalData.length - 20) {
       this.setState({
         dataIndex: this.state.dataIndex + 20,
       })
@@ -163,67 +233,152 @@ class App extends Component {
       })
     }
   }
+
   handleSort = () => {
+    const header = document.querySelectorAll('th');
 
-    if (this.state.sorted === 'none') {
-      this.setState({
-        sorted: 'asc',
+    header[0].addEventListener('click', () => {
 
-        companiesIds: this.state.companiesIdsSorted,
-        companiesNames: this.state.companiesNamesSorted,
-        companiesCities: this.state.companiesCitiesSorted,
-        companiesIncomes: {
-          totalIncomes: this.state.companiesIncomes.totalIncomes.splice(0).sort(),
-          averageIncomes: this.state.companiesIncomes.averageIncomes.splice(0).sort(),
-          lastMonthIncomes: this.state.companiesIncomes.lastMonthIncomes.splice(0).sort()
-        }
+      if (this.state.sorted === 'none') {
+        this.setState({
+          sorted: 'asc',
+          finalData: this.state.ids
+        })
+      } else if (this.state.sorted === 'asc') {
+        this.setState({
+          sorted: 'desc',
+          finalData: this.state.idsRev
+        })
+      } else if (this.state.sorted === 'desc') {
+        this.setState({
+          sorted: 'none',
+          finalData: this.state.originalData
+        })
+      }
+    })
 
-      })
-    }
-    else if (this.state.sorted === 'asc') {
-      this.setState({
-        sorted: 'desc',
-        companiesNames: this.state.companiesNamesSortedReverse,
-        companiesIds: this.state.companiesIdsSortedReverse,
-        companiesCities: this.state.companiesCitiesSortedReverse,
-        companiesIncomes: {
-          totalIncomes: this.state.companiesIncomes.totalIncomes.splice(0).sort().reverse(),
-          averageIncomes: this.state.companiesIncomes.averageIncomes.splice(0).sort().reverse(),
-          lastMonthIncomes: this.state.companiesIncomes.lastMonthIncomes.splice(0).sort().reverse()
-        }
+    header[1].addEventListener('click', () => {
+      if (this.state.sorted === 'none') {
+        this.setState({
+          sorted: 'asc',
+          finalData: this.state.names
+        })
+      }
+      else if (this.state.sorted === 'asc') {
+        this.setState({
+          sorted: 'desc',
+          finalData: this.state.namesRev
+        })
+      }
+      else if (this.state.sorted === 'desc') {
+        this.setState({
+          sorted: 'none',
+          finalData: this.state.originalData
+        })
+      }
+    })
 
-      })
+    header[2].addEventListener('click', () => {
+      if (this.state.sorted === 'none') {
+        this.setState({
+          sorted: 'asc',
+          finalData: this.state.cities
+        })
+      }
+      else if (this.state.sorted === 'asc') {
+        this.setState({
+          sorted: 'desc',
+          finalData: this.state.citiesRev
+        })
+      }
+      else if (this.state.sorted === 'desc') {
+        this.setState({
+          sorted: 'none',
+          finalData: this.state.originalData
+        })
+      }
+    })
+    header[3].addEventListener('click', () => {
+      if (this.state.sorted === 'none') {
+        this.setState({
+          sorted: 'asc',
+          finalData: this.state.totals
+        })
+      }
+      else if (this.state.sorted === 'asc') {
+        this.setState({
+          sorted: 'desc',
+          finalData: this.state.totalsRev
+        })
+      }
+      else if (this.state.sorted === 'desc') {
+        this.setState({
+          sorted: 'none',
+          finalData: this.state.originalData
+        })
+      }
+    })
 
-    }
-    else if (this.state.sorted === 'desc') {
-      this.setState(({
-        sorted: 'none',
-        companiesIds: this.state.originalsIds,
-        companiesNames: this.state.originalsNames,
-        companiesCities: this.state.originalsCities,
-        companiesIncomes: {
-          totalIncomes: this.state.companiesIncomesOriginals.totalIncomesOriginals,
-          averageIncomes: this.state.companiesIncomesOriginals.averageIncomesOriginals,
-          lastMonthIncomes: this.state.companiesIncomesOriginals.lastMonthIncomesOriginals
-        }
-      }))
-    }
+    header[4].addEventListener('click', () => {
+      if (this.state.sorted === 'none') {
+        this.setState({
+          sorted: 'asc',
+          finalData: this.state.average
+        })
+      }
+      else if (this.state.sorted === 'asc') {
+        this.setState({
+          sorted: 'desc',
+          finalData: this.state.averageRev
+        })
+      }
+      else if (this.state.sorted === 'desc') {
+        this.setState({
+          sorted: 'none',
+          finalData: this.state.originalData
+        })
+      }
+    })
 
+
+    header[5].addEventListener('click', () => {
+      if (this.state.sorted === 'none') {
+        this.setState({
+          sorted: 'asc',
+          finalData: this.state.lastMonth
+        })
+      }
+      else if (this.state.sorted === 'asc') {
+        this.setState({
+          sorted: 'desc',
+          finalData: this.state.lastMonthRev
+        })
+      }
+      else if (this.state.sorted === 'desc') {
+        this.setState({
+          sorted: 'none',
+          finalData: this.state.originalData
+        })
+      }
+    })
 
 
   }
 
+
   render() {
 
     return (
+      < div >
+        {this.createCompanySet()}
 
-      <div>
+        {
+          this.state.loading ?
+            <div className='loadingText'>Loading datas...</div> :
+            <div className='headerText'>Recruitment Task - Table of Companies details and incomes. </div>
+        }
 
-        {this.state.loading ?
-          <div className='loadingText'>Loading datas...</div> :
-          <div className='headerText'>Recruitment Task - Table of Companies details and incomes. </div>}
-
-        <input type="text" className='filterInput' />
+        < input type="text" className='filterInput' />
         <div className='tableSwitchers'>
 
           <button className="button nextPage" onClick={this.handleNextPage}> &rarr; </button>
@@ -239,13 +394,13 @@ class App extends Component {
             {(this.state.finalData.length > 0) ? this.state.finalData.map((data, index) => {
               if (index < 20) {
                 return (
-                  <tr key={index} data={`${this.state.companiesIds[this.state.dataIndex + index]} | ${this.state.companiesNames[this.state.dataIndex + index]} | ${this.state.companiesCities[this.state.dataIndex + index]} | ${this.state.companiesIncomes.totalIncomes[this.state.dataIndex + index]}| ${this.state.companiesIncomes.averageIncomes[this.state.dataIndex + index]} | ${this.state.companiesIncomes.lastMonthIncomes[this.state.dataIndex + index]}`} className='table_row'>
-                    <td className='table_data'> {this.state.companiesIds[this.state.dataIndex + index]}</td>
-                    <td className='table_data'>{this.state.companiesNames[this.state.dataIndex + index]}</td>
-                    <td className='table_data'>{this.state.companiesCities[this.state.dataIndex + index]}</td>
-                    <td className='table_data'>{this.state.companiesIncomes.totalIncomes[this.state.dataIndex + index]}</td>
-                    <td className='table_data'>{this.state.companiesIncomes.averageIncomes[this.state.dataIndex + index]}</td>
-                    <td className='table_data'>{this.state.companiesIncomes.lastMonthIncomes[this.state.dataIndex + index]}</td>
+                  <tr key={index} className='table_row'>
+                    <td className='table_data'> {this.state.finalData[this.state.dataIndex + index].id}</td>
+                    <td className='table_data'>{this.state.finalData[this.state.dataIndex + index].name}</td>
+                    <td className='table_data'>{this.state.finalData[this.state.dataIndex + index].city}</td>
+                    <td className='table_data'>{this.state.finalData[this.state.dataIndex + index].total}</td>
+                    <td className='table_data'>{this.state.finalData[this.state.dataIndex + index].average}</td>
+                    <td className='table_data'>{this.state.finalData[this.state.dataIndex + index].lastMonth}</td>
                   </tr>
                 )
               }
